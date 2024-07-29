@@ -1,6 +1,8 @@
 {
 	"dependencies": {
-		"express": "^4.19.2"
+		"express": "^4.19.2",
+		"mongodb": "^6.8.0",
+		"mongoose": "^8.5.1"
 	},
 	"name": "medic_api",
 	"version": "1.0.0",

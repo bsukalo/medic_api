@@ -1,11 +1,11 @@
 const express = require("express");
+const connectDb = require("./config/connectDb");
+const dotenv = require("dotenv").config();
+
+connectDb();
 const app = express();
-const PORT = 3000;
+const port = process.env.PORT;
 
-app.listen(PORT, () =>
-	console.log(`Server is running on http://localhost:${PORT}`)
+app.listen(port, () =>
+	console.log(`Server is running on http://localhost:${port}`)
 );
-
-app.get("/", (req, res) => {
-	res.send("Hello World");
-});
