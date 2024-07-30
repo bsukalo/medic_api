@@ -10,6 +10,19 @@ const userSchema = mongoose.Schema(
 			type: String,
 			required: [true, "Please enter password"],
 		},
+		name: {
+			type: String,
+		},
+		orders: {
+			type: Number,
+		},
+		dateOfBirth: {
+			type: Date,
+		},
+		lastLogin: {
+			type: Date,
+			default: Date.now(),
+		},
 	},
 	{ timestamps: true }
 );
