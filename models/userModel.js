@@ -11,6 +11,7 @@ const userSchema = mongoose.Schema(
 			required: [true, "Please enter password"],
 		},
 
+		// details
 		name: {
 			type: String,
 			parent: "details",
