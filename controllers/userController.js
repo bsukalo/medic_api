@@ -15,6 +15,12 @@ const loginUser = asyncHander(async (req, res) => {
 	const user = await User.findOne({ username });
 
 	if (user && (await bcrypt.compare(password, user.password))) {
+		if (!user.isAdmin) {
+			res.status(401);
+			throw new Error(
+				"Current user does not have required admin privileges to login"
+			);
+		}
 		const accessToken = jwt.sign(
 			{
 				user: {
@@ -24,10 +30,10 @@ const loginUser = asyncHander(async (req, res) => {
 				},
 			},
 			process.env.ACCESS_TOKEN,
-			{ expiresIn: "5m" }
+			{ expiresIn: "15m" }
 		);
 		await User.findOneAndUpdate(
-			{ username: user.username },
+			{ _id: user.id },
 			{ lastLogin: Date.now() }
 		);
 		res.status(200).json({
