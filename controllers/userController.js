@@ -15,10 +15,10 @@ const loginUser = asyncHander(async (req, res) => {
 	const user = await User.findOne({ username });
 
 	if (user && (await bcrypt.compare(password, user.password))) {
-		if (!user.isAdmin) {
+		if (!user.isAdmin || user.isBlocked) {
 			res.status(401);
 			throw new Error(
-				"Current user does not have required admin privileges to login"
+				"Current user does not have required admin privileges or is blocked"
 			);
 		}
 		const accessToken = jwt.sign(
@@ -67,7 +67,7 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 		res.status(404);
 		throw new Error("User not found");
 	} else {
-		res.json({
+		res.status(200).json({
 			username: user.username,
 			name: user.name,
 			imageURL: user.imageURL,
@@ -75,6 +75,26 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 			orders: user.orders,
 			dateOfBirth: user.dateOfBirth,
 		});
+	}
+});
+
+//@desc Block user by id
+//@route POST /api/users/block/(id)
+//@access public
+const blockUser = asyncHander(async (req, res) => {
+	let user = await User.findById(req.params.id);
+	if (!user) {
+		res.status(404);
+		throw new Error("User not found");
+	} else if (user.isBlocked) {
+		res.status(400);
+		throw new Error("User already blocked");
+	} else {
+		await User.findByIdAndUpdate(req.params.id, {
+			isBlocked: true,
+		});
+
+		res.status(200).send(`User ${user.username} successfully blocked`);
 	}
 });
 
@@ -139,4 +159,5 @@ module.exports = {
 	logoutUser,
 	fetchAllUsers,
 	fetchUserDetails,
+	blockUser,
 };
