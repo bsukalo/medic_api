@@ -10,18 +10,39 @@ const userSchema = mongoose.Schema(
 			type: String,
 			required: [true, "Please enter password"],
 		},
+
 		name: {
 			type: String,
+			parent: "details",
+		},
+		imageURL: {
+			type: String,
+			parent: "details",
+		},
+		status: {
+			type: String,
+			parent: "details",
 		},
 		orders: {
 			type: Number,
+			parent: "details",
 		},
 		dateOfBirth: {
 			type: Date,
+			parent: "details",
 		},
+
 		lastLogin: {
 			type: Date,
 			default: Date.now(),
+		},
+		isAdmin: {
+			type: Boolean,
+			default: false,
+		},
+		isBlocked: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	{ timestamps: false }

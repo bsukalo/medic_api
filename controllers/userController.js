@@ -63,7 +63,8 @@ const logoutUser = asyncHander(async (req, res) => {
 //@route POST /api/register
 //@access private
 const registerUser = asyncHander(async (req, res) => {
-	const { username, password } = req.body;
+	const { username, password, name, imageURL, status, orders, dateOfBirth } =
+		req.body;
 	if (!username || !password) {
 		res.status(400);
 		throw new Error("Username and password fields are required");
@@ -73,13 +74,33 @@ const registerUser = asyncHander(async (req, res) => {
 		res.status(400);
 		throw new Error("Username is taken");
 	}
+	if (orders < 0 || orders > 10) {
+		res.status(400);
+		throw new Error("Orders must be between 0 and 10");
+	}
 
 	const hashedPassword = await bcrypt.hash(password, 10);
-	const user = await User.create({ username, password: hashedPassword });
+	const user = await User.create({
+		username,
+		password: hashedPassword,
+		name,
+		imageURL,
+		status,
+		orders,
+		dateOfBirth,
+	});
 
 	console.log(`User registered ${user}`);
 	if (user) {
-		res.status(201).json({ _id: user.id, password: hashedPassword });
+		res.status(201).json({
+			_id: user.id,
+			password: hashedPassword,
+			name: user.name,
+			imageURL: user.imageURL,
+			status: user.status,
+			orders: user.orders,
+			dateOfBirth: user.dateOfBirth,
+		});
 	} else {
 		res.status(400);
 		throw new Error("Input is invalid");
