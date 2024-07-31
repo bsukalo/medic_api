@@ -3,35 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-//@desc Register user
-//@route POST /api/users/register
-//@access private
-const registerUser = asyncHander(async (req, res) => {
-	const { username, password } = req.body;
-	if (!username || !password) {
-		res.status(400);
-		throw new Error("Username and password fields are required");
-	}
-	const userAvailable = await User.findOne({ username });
-	if (userAvailable) {
-		res.status(400);
-		throw new Error("Username is taken");
-	}
-
-	const hashedPassword = await bcrypt.hash(password, 10);
-	const user = await User.create({ username, password: hashedPassword });
-
-	console.log(`User registered ${user}`);
-	if (user) {
-		res.status(201).json({ _id: user.id, password: hashedPassword });
-	} else {
-		res.status(400);
-		throw new Error("Input is invalid");
-	}
-});
-
 //@desc Log user in
-//@route POST /api/users/login
+//@route POST /api/login
 //@access public
 const loginUser = asyncHander(async (req, res) => {
 	const { username, password } = req.body;
@@ -71,11 +44,46 @@ const loginUser = asyncHander(async (req, res) => {
 	}
 });
 
+//@desc Fetch users
+//@route POST /api/users
+//@access public
+const fetchAllUsers = asyncHander(async (req, res) => {
+	let users = await User.find({});
+	res.json({ users });
+});
+
 //@desc Log user out
-//@route POST /api/users/logout
+//@route POST /api/logout
 //@access private
 const logoutUser = asyncHander(async (req, res) => {
 	res.json({ message: "Log user out" });
 });
 
-module.exports = { registerUser, loginUser, logoutUser };
+//@desc Register user
+//@route POST /api/register
+//@access private
+const registerUser = asyncHander(async (req, res) => {
+	const { username, password } = req.body;
+	if (!username || !password) {
+		res.status(400);
+		throw new Error("Username and password fields are required");
+	}
+	const userAvailable = await User.findOne({ username });
+	if (userAvailable) {
+		res.status(400);
+		throw new Error("Username is taken");
+	}
+
+	const hashedPassword = await bcrypt.hash(password, 10);
+	const user = await User.create({ username, password: hashedPassword });
+
+	console.log(`User registered ${user}`);
+	if (user) {
+		res.status(201).json({ _id: user.id, password: hashedPassword });
+	} else {
+		res.status(400);
+		throw new Error("Input is invalid");
+	}
+});
+
+module.exports = { registerUser, loginUser, logoutUser, fetchAllUsers };
