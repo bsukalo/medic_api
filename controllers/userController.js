@@ -30,7 +30,7 @@ const loginUser = asyncHander(async (req, res) => {
 				},
 			},
 			process.env.ACCESS_TOKEN,
-			{ expiresIn: "15m" }
+			{ expiresIn: "2m" }
 		);
 		await User.findOneAndUpdate(
 			{ _id: user.id },
@@ -52,7 +52,7 @@ const loginUser = asyncHander(async (req, res) => {
 
 //@desc Fetch users
 //@route GET /api/users
-//@access public
+//@access private
 const fetchAllUsers = asyncHander(async (req, res) => {
 	let users = await User.find();
 	res.json({ users });
@@ -60,7 +60,7 @@ const fetchAllUsers = asyncHander(async (req, res) => {
 
 //@desc Fetch details of specific user
 //@route GET /api/users/details/(id)
-//@access public
+//@access private
 const fetchUserDetails = asyncHander(async (req, res) => {
 	let user = await User.findById(req.params.id);
 	if (!user) {
@@ -80,7 +80,7 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 
 //@desc Block user by id
 //@route POST /api/users/block/(id)
-//@access public
+//@access private
 const blockUser = asyncHander(async (req, res) => {
 	let user = await User.findById(req.params.id);
 	if (!user) {

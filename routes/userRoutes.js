@@ -13,13 +13,13 @@ const router = express.Router();
 
 router.post("/login", loginUser);
 
-router.get("/users", fetchAllUsers);
+router.get("/users", validateToken, fetchAllUsers);
 
-router.get("/users/details/:id", fetchUserDetails);
+router.get("/users/details/:id", validateToken, fetchUserDetails);
 
-router.post("/users/block/:id", blockUser);
+router.post("/users/block/:id", validateToken, blockUser);
 
-router.post("/logout", logoutUser);
+router.post("/logout", validateToken, logoutUser);
 
 router.post("/register", validateToken, registerUser);
 
