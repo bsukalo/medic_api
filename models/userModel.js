@@ -14,23 +14,18 @@ const userSchema = mongoose.Schema(
 		// details
 		name: {
 			type: String,
-			parent: "details",
 		},
 		imageURL: {
 			type: String,
-			parent: "details",
 		},
 		status: {
 			type: String,
-			parent: "details",
 		},
 		orders: {
 			type: Number,
-			parent: "details",
 		},
 		dateOfBirth: {
 			type: Date,
-			parent: "details",
 		},
 
 		lastLogin: {
