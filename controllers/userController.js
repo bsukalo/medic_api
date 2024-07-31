@@ -56,7 +56,7 @@ const fetchAllUsers = asyncHander(async (req, res) => {
 //@route POST /api/logout
 //@access private
 const logoutUser = asyncHander(async (req, res) => {
-	res.json({ message: "Log user out" });
+	res.status(401).send("Logged out");
 });
 
 //@desc Register user
