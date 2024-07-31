@@ -45,7 +45,7 @@ const loginUser = asyncHander(async (req, res) => {
 });
 
 //@desc Fetch users
-//@route POST /api/users
+//@route GET /api/users
 //@access public
 const fetchAllUsers = asyncHander(async (req, res) => {
 	let users = await User.find({});
