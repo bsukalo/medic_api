@@ -54,8 +54,28 @@ const loginUser = asyncHander(async (req, res) => {
 //@route GET /api/users
 //@access public
 const fetchAllUsers = asyncHander(async (req, res) => {
-	let users = await User.find({});
+	let users = await User.find();
 	res.json({ users });
+});
+
+//@desc Fetch details of specific user
+//@route GET /api/users/details/(id)
+//@access public
+const fetchUserDetails = asyncHander(async (req, res) => {
+	let user = await User.findById(req.params.id);
+	if (!user) {
+		res.status(404);
+		throw new Error("User not found");
+	} else {
+		res.json({
+			username: user.username,
+			name: user.name,
+			imageURL: user.imageURL,
+			status: user.status,
+			orders: user.orders,
+			dateOfBirth: user.dateOfBirth,
+		});
+	}
 });
 
 //@desc Log user out
@@ -113,4 +133,10 @@ const registerUser = asyncHander(async (req, res) => {
 	}
 });
 
-module.exports = { registerUser, loginUser, logoutUser, fetchAllUsers };
+module.exports = {
+	registerUser,
+	loginUser,
+	logoutUser,
+	fetchAllUsers,
+	fetchUserDetails,
+};
