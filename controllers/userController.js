@@ -30,7 +30,7 @@ const loginUser = asyncHander(async (req, res) => {
 				},
 			},
 			process.env.ACCESS_TOKEN,
-			{ expiresIn: "2m" }
+			{ expiresIn: "15m" }
 		);
 		await User.findOneAndUpdate(
 			{ _id: user.id },
@@ -45,7 +45,7 @@ const loginUser = asyncHander(async (req, res) => {
 	} else {
 		res.status(401);
 		throw new Error(
-			"Email and password combination does not match existing user"
+			"Username and password combination does not match existing user"
 		);
 	}
 });
