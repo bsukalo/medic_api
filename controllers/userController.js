@@ -72,11 +72,12 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 		throw new Error("User not found");
 	} else {
 		res.status(200).json({
+			id: user._id.toString(),
 			username: user.username,
 			name: user.name,
+			orders: user.orders,
 			imageURL: user.imageURL,
 			status: user.status,
-			orders: user.orders,
 			dateOfBirth: user.dateOfBirth,
 		});
 	}
