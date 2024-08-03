@@ -54,8 +54,12 @@ const loginUser = asyncHander(async (req, res) => {
 //@route GET /api/users
 //@access private
 const fetchAllUsers = asyncHander(async (req, res) => {
-	let users = await User.find();
-	res.json({ users });
+	try {
+		const users = await User.find({});
+		res.json({ count: users.length, results: users });
+	} catch (err) {
+		res.status(500).json({ error: "Failed to fetch users" });
+	}
 });
 
 //@desc Fetch details of specific user
