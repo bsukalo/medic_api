@@ -1,4 +1,4 @@
-const asyncHander = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
@@ -6,7 +6,7 @@ const User = require("../models/userModel");
 //@desc Log user in
 //@route POST /api/login
 //@access public
-const loginUser = asyncHander(async (req, res) => {
+const loginUser = asyncHandler(async (req, res) => {
 	const { username, password } = req.body;
 	if (!username || !password) {
 		res.status(400);
@@ -53,7 +53,7 @@ const loginUser = asyncHander(async (req, res) => {
 //@desc Fetch users
 //@route GET /api/users
 //@access private
-const fetchAllUsers = asyncHander(async (req, res) => {
+const fetchAllUsers = asyncHandler(async (req, res) => {
 	try {
 		const users = await User.find({});
 		res.json({ count: users.length, results: users });
@@ -65,7 +65,7 @@ const fetchAllUsers = asyncHander(async (req, res) => {
 //@desc Fetch details of specific user
 //@route GET /api/users/details/(id)
 //@access private
-const fetchUserDetails = asyncHander(async (req, res) => {
+const fetchUserDetails = asyncHandler(async (req, res) => {
 	let user = await User.findById(req.params.id);
 	if (!user) {
 		res.status(404);
@@ -89,7 +89,7 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 //@desc Block user by id
 //@route POST /api/users/block/(id)
 //@access private
-const blockUser = asyncHander(async (req, res) => {
+const blockUser = asyncHandler(async (req, res) => {
 	let user = await User.findById(req.params.id);
 	if (!user) {
 		res.status(404);
@@ -109,14 +109,14 @@ const blockUser = asyncHander(async (req, res) => {
 //@desc Log user out
 //@route POST /api/logout
 //@access private
-const logoutUser = asyncHander(async (req, res) => {
+const logoutUser = asyncHandler(async (req, res) => {
 	res.status(401).send("Logged out");
 });
 
 //@desc Register user
 //@route POST /api/register
 //@access private
-const registerUser = asyncHander(async (req, res) => {
+const registerUser = asyncHandler(async (req, res) => {
 	const { username, password, name, imageURL, status, orders, dateOfBirth } =
 		req.body;
 	if (!username || !password) {
@@ -161,6 +161,28 @@ const registerUser = asyncHander(async (req, res) => {
 	}
 });
 
+//@desc Update user
+//@route PUT /api/users/update/(id)
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
+	const user = await User.findById(req.params.id);
+	if (!user) {
+		res.status(404);
+		throw new Error("User not found");
+	}
+
+	/* if (user.user_id.toString() !== req.user.id) {
+		res.status(403);
+		throw new Error()
+	} */
+
+	const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+		new: true,
+	});
+
+	res.status(200).json(updatedUser);
+});
+
 module.exports = {
 	registerUser,
 	loginUser,
@@ -168,4 +190,5 @@ module.exports = {
 	fetchAllUsers,
 	fetchUserDetails,
 	blockUser,
+	updateUser,
 };

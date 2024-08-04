@@ -6,6 +6,7 @@ const {
 	fetchAllUsers,
 	fetchUserDetails,
 	blockUser,
+	updateUser,
 } = require("../controllers/userController");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -22,5 +23,7 @@ router.post("/users/block/:id", validateToken, blockUser);
 router.post("/logout", validateToken, logoutUser);
 
 router.post("/register", validateToken, registerUser);
+
+router.put("/users/update/:id", validateToken, updateUser);
 
 module.exports = router;
