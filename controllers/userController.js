@@ -79,6 +79,7 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 			imageURL: user.imageURL,
 			status: user.status,
 			dateOfBirth: user.dateOfBirth,
+			lastLogin: user.lastLogin,
 		});
 	}
 });
