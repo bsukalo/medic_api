@@ -80,6 +80,8 @@ const fetchUserDetails = asyncHander(async (req, res) => {
 			status: user.status,
 			dateOfBirth: user.dateOfBirth,
 			lastLogin: user.lastLogin,
+			isAdmin: user.isAdmin,
+			isBlocked: user.isBlocked,
 		});
 	}
 });
