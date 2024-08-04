@@ -171,11 +171,6 @@ const updateUser = asyncHandler(async (req, res) => {
 		throw new Error("User not found");
 	}
 
-	/* if (user.user_id.toString() !== req.user.id) {
-		res.status(403);
-		throw new Error()
-	} */
-
 	const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, {
 		new: true,
 	});
